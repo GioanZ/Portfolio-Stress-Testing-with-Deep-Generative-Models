@@ -22,13 +22,15 @@ Financial markets experience sudden crashes, such as the 2008 financial crisis o
 
 ### Macroeconomic Indicators
 - Source: Federal Reserve Economic Data (FRED API)
-- Variables:
-  - Inflation Rate (CPIAUCSL)
-  - Federal Funds Rate (FEDFUNDS)
-  - Unemployment Rate (UNRATE)
-  - 3-Month Treasury Rate (DGS3MO)
-  - 10-Year Treasury Rate (DGS10)
-  - VIX Index (from Yahoo Finance)
+   - Variables:
+      - Inflation Rate (CPIAUCSL)
+      - Federal Funds Rate (FEDFUNDS)
+      - Unemployment Rate (UNRATE)
+      - 3-Month Treasury Rate (DGS3MO)
+      - 10-Year Treasury Rate (DGS10)
+- Source: Yahoo Finance
+   - Variables:
+      - VIX Index (from Yahoo Finance)
 - Preprocessing: Forward-filled missing values and standardized features.
 
 ## Goals
@@ -56,3 +58,4 @@ Financial markets experience sudden crashes, such as the 2008 financial crisis o
 To run the code, install the required Python packages:
 ```bash
 pip install numpy pandas matplotlib yfinance fredapi tensorflow scikit-learn scipy
+```
