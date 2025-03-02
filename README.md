@@ -18,7 +18,7 @@ Financial markets experience sudden crashes, such as the 2008 financial crisis o
 ### Market Data
 - Source: Yahoo Finance
 - Portfolio: [Warren Buffett's 2019 Q4 portfolio](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=2).
-- Timeframe: Data is collected from 2000 to 2025, but only the period from 2018 onward is considered, as many assets did not exist before that time.
+- Timeframe: Data is collected from 2000 to the end of 2024, but only the period from 2018 onward is considered, as many assets did not exist before that time.
 
 ### Macroeconomic Indicators
 - Source: Federal Reserve Economic Data (FRED API)
