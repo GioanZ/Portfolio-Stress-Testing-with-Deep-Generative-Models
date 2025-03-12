@@ -1,3 +1,5 @@
 test_code
-models
+models_old
 key_fred.txt
+debug.log
+custom_libraries/__pycache__
