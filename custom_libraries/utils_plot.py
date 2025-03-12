@@ -219,7 +219,9 @@ def plot_historical_vs_synthetic_var_period_per_tickers(backtest_df, returns_tes
         # Formatting
         plt.xlabel("Date")
         plt.ylabel("Return")
-        plt.title(f"Rolling Backtest: Historical Return vs. VaR for {stock}")
+        plt.title(
+            f"Rolling Backtest: Historical Return vs. Worst Case Scenario for {stock}"
+        )
         plt.legend()
         plt.xticks(rotation=45)
         plt.grid(True)
@@ -255,18 +257,9 @@ def plot_historical_vs_synthetic_var_period_per_tickers(
         ax.plot(
             backtest_df["forecast_date"],
             backtest_df[f"synthetic_VaR_{stock}"],
-            label=f"VaR {stock} (5%)",
+            label=f"Worst Case Scenario {stock} (Var 5%)",
             linestyle="--",
             color="red",
-        )
-
-        # Plot synthetic Expected Shortfall (ES)
-        ax.plot(
-            backtest_df["forecast_date"],
-            backtest_df[f"synthetic_ES_{stock}"],
-            label=f"ES {stock} (5%)",
-            linestyle="dotted",
-            color="black",
         )
 
         # Formatting
@@ -294,8 +287,10 @@ def plot_bar_diff(hist_returns, synthetic_vars, tickers):
     plt.figure(figsize=(14, 6))
     plt.bar(tickers, diff, color=colors)
     plt.xlabel("Ticker")
-    plt.ylabel("Synthetic VaR - Historical Return")
-    plt.title("Difference between Synthetic VaR and Historical Return per Ticker")
+    plt.ylabel("Synthetic Worst Case Scenario - Actual Return")
+    plt.title(
+        "Difference between Synthetic Worst Case Scenario and Actual Return per Ticker"
+    )
     plt.xticks(rotation=45)
     plt.axhline(0, color="black", linewidth=0.8)
     plt.grid(True, linestyle="--", alpha=0.7)
@@ -361,8 +356,8 @@ def plot_scatter_actual_vs_synthetic_oblique(hist_returns, synthetic_vars, ticke
             ha="center",
         )
     plt.xlabel("Mean Historical Return")
-    plt.ylabel("Mean Synthetic VaR (5%)")
-    plt.title("Historical Return vs. Synthetic VaR (Per Ticker)")
+    plt.ylabel("Mean Synthetic Worst Case Scenario (Var 5%)")
+    plt.title("Historical Return vs. Synthetic Worst Case Scenario Per Ticker (Var 5%)")
     plt.legend()
     plt.grid(True, linestyle="--", alpha=0.7)
     plt.tight_layout()
