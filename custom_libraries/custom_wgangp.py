@@ -1,19 +1,37 @@
 import logging
 import numpy as np
 import tensorflow as tf
+
 from tensorflow.keras import layers, Model
 
 
 def build_conditional_generator(noise_dim, macro_dim, latent_dim):
     noise_input = layers.Input(shape=(noise_dim,), name="noise_input")
     macro_input = layers.Input(shape=(macro_dim,), name="macro_input_gen")
+
     x = layers.Concatenate(name="concat_gen")([noise_input, macro_input])
-    x = layers.Dense(256, activation="relu")(x)
-    x = layers.Dense(256, activation="relu")(x)
-    x = layers.Dense(128, activation="relu")(x)
-    x = layers.Dense(128, activation="relu")(x)
-    x = layers.Dense(64, activation="relu")(x)
+    x = layers.Dense(256)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Dense(256)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Dense(128)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Dense(128)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.BatchNormalization()(x)
+
+    x = layers.Dense(64)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.BatchNormalization()(x)
+
     output_latent = layers.Dense(latent_dim, name="latent_generated")(x)
+
     model = Model(
         [noise_input, macro_input], output_latent, name="conditional_generator"
     )
@@ -23,13 +41,28 @@ def build_conditional_generator(noise_dim, macro_dim, latent_dim):
 def build_conditional_critic(latent_dim, macro_dim):
     latent_input = layers.Input(shape=(latent_dim,), name="latent_input")
     macro_input = layers.Input(shape=(macro_dim,), name="macro_input_critic")
+
     x = layers.Concatenate(name="concat_critic")([latent_input, macro_input])
-    x = layers.Dense(256, activation="relu")(x)
-    x = layers.Dense(256, activation="relu")(x)
-    x = layers.Dense(128, activation="relu")(x)
-    x = layers.Dense(128, activation="relu")(x)
-    x = layers.Dense(64, activation="relu")(x)
+
+    x = layers.Dense(256)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.Dropout(0.1)(x)
+
+    x = layers.Dense(256)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+    x = layers.Dropout(0.1)(x)
+
+    x = layers.Dense(128)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+
+    x = layers.Dense(128)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+
+    x = layers.Dense(64)(x)
+    x = layers.LeakyReLU(alpha=0.2)(x)
+
     output_score = layers.Dense(1, name="critic_score")(x)
+
     model = Model([latent_input, macro_input], output_score, name="conditional_critic")
     return model
 

@@ -150,12 +150,12 @@ def plot_historical_vs_synthetic_var_period(backtest_df):
     plt.plot(
         backtest_df["forecast_date"],
         backtest_df["synthetic_VaR"],
-        label="Synthetic VaR (5%)",
+        label="Worst Case Scenario",
         linestyle="--",
     )
     plt.xlabel("Forecast Date")
     plt.ylabel("Return")
-    plt.title("Rolling Backtest: Historical Returns vs. Synthetic VaR")
+    plt.title("Rolling Backtest: Historical Returns vs. Worst Case Scenario")
     plt.legend()
     plt.xticks(rotation=45)
     plt.tight_layout()
@@ -211,24 +211,15 @@ def plot_historical_vs_synthetic_var_period_per_tickers(backtest_df, returns_tes
         plt.plot(
             backtest_df["forecast_date"],
             backtest_df[f"synthetic_VaR_{stock}"],
-            label=f"VaR {stock} (5%)",
+            label=f"Worst Case Scenario {stock} (VaR 5%)",
             linestyle="--",
             color="red",
-        )
-
-        # Plot synthetic Expected Shortfall (ES)
-        plt.plot(
-            backtest_df["forecast_date"],
-            backtest_df[f"synthetic_ES_{stock}"],
-            label=f"ES {stock} (5%)",
-            linestyle="dotted",
-            color="black",
         )
 
         # Formatting
         plt.xlabel("Date")
         plt.ylabel("Return")
-        plt.title(f"Rolling Backtest: Historical Return vs. VaR & ES for {stock}")
+        plt.title(f"Rolling Backtest: Historical Return vs. VaR for {stock}")
         plt.legend()
         plt.xticks(rotation=45)
         plt.grid(True)

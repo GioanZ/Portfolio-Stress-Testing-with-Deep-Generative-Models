@@ -5,7 +5,6 @@ from tensorflow.keras.models import load_model
 
 
 def save_models(encoder, decoder, cvae, generator, critic, folder_name="models"):
-    folder_name = "models"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
 
