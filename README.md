@@ -15,6 +15,8 @@ The goal is to measure Value at Risk (VaR) and Expected Shortfall (ES) to analyz
 
 ### 1. Data Acquisition & Preprocessing
 - **Portfolio** used for analysis would be [Warren Buffett’s Q4 2019 holdings](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=1).
+  - **Asset Selection**: Only stocks that existed since 2004 were included in the portfolio.  
+  - **Weight Adjustment**: The original weights were rebalanced proportionally to maintain Warren Buffett’s weighting style, but scaled to reflect only the remaining selected stocks after filtering out ineligible assets.
 - **Market Data** is collected from [Yahoo Finance](https://developer.yahoo.com/api/).
 - **Macroeconomic Indicators** are obtained from [FRED API](https://fred.stlouisfed.org/docs/api/fred/), including:
   - Federal Funds Rate
@@ -180,7 +182,7 @@ Example:
 ```txt
 your_fred_api_key_here
 ```
-Now you are ready to use the code! The script `download_data.py` will automatically read the key from this file.
+Now you are ready to use the code! The script `custom_libraries/download_data.py` will automatically read the key from this file.
 
 ---
 
