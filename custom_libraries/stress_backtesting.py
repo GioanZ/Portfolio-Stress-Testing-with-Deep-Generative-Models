@@ -3,8 +3,6 @@ import pandas as pd
 
 import tensorflow as tf
 
-from scipy.stats import genpareto, chi2
-
 from custom_libraries.metrics_validation import (
     calculate_var_es,
 )
@@ -20,7 +18,7 @@ def create_stressed_input_condition(
     for key, idx in indices.items():
         if key in stress_values:
             stressed_condition.iloc[i, idx] = stress_values[key]
-    return scaler.transform(stressed_condition), stressed_condition
+    return scaler.transform(stressed_condition[: i + 1]), stressed_condition
 
 
 def generate_scenarios_for_one_day(

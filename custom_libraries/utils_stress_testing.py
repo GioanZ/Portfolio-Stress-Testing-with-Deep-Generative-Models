@@ -77,6 +77,7 @@ def cluster_extreme_latent(z_codes, random_seed, n_clusters=3):
     return extreme_indices, clusters, kmeans.cluster_centers_
 
 
+# TODO
 def run_stress_testing(
     portfolio_weights, returns_test, generated_latent, synthetic_returns, random_seed
 ):
