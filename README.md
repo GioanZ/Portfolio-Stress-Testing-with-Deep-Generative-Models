@@ -82,25 +82,25 @@ stress_values = {
 
 ## Project Components
 ### 1. GPU Setup & Optimization
-- `start_gpu.py`: Configures GPU memory allocation and limits TensorFlow GPU usage.
+- `custom_libraries/start_gpu.py`: Configures GPU memory allocation and limits TensorFlow GPU usage.
 
 ### 2. Preprocessing Modules
-- `download_data.py`: Handles data collection from Yahoo Finance (market data, VIX, FX, S&P500) and FRED API (inflation, unemployment, interest rates).
-- `preprocess_data.py`: Processes and scales the collected data, handling missing values and computing `returns_sp500_roll_5` for worst-case scenario modeling.
+- `custom_libraries/download_data.py`: Handles data collection from Yahoo Finance (market data, VIX, FX, S&P500) and FRED API (inflation, unemployment, interest rates).
+- `custom_libraries/preprocess_data.py`: Processes and scales the collected data, handling missing values and computing `returns_sp500_roll_5` for worst-case scenario modeling.
 
 ### 3. Model Implementation
-- `custom_vae.py`: Implements cVAE (encoder, decoder, loss layers).
-- `custom_wgangp.py`: Defines the Conditional WGAN-GP (generator, critic, loss functions).
-- `custome_layer.py`: Defines custom layers for the VAE, including Sampling, KL Divergence, and Reconstruction Loss layers.
-- `utils.py`: Handles model saving/loading and data formatting functions.
+- `custom_libraries/custom_vae.py`: Implements cVAE (encoder, decoder, loss layers).
+- `custom_libraries/custom_wgangp.py`: Defines the Conditional WGAN-GP (generator, critic, loss functions).
+- `custom_libraries/custome_layer.py`: Defines custom layers for the VAE, including Sampling, KL Divergence, and Reconstruction Loss layers.
+- `custom_libraries/utils.py`: Handles model saving/loading and data formatting functions.
 
 ### 4. Stress Testing & Evaluation
-- `stress_backtesting.py`: Simulates extreme market conditions.
-- `metrics_validation.py`: Computes VaR, ES, and divergence scores.
-- `utils_stress_testing.py`: Validates synthetic scenarios.
+- `custom_libraries/stress_backtesting.py`: Simulates extreme market conditions.
+- `custom_libraries/metrics_validation.py`: Computes VaR, ES, and divergence scores.
+- `custom_libraries/utils_stress_testing.py`: Validates synthetic scenarios.
 
 ### 5. Visualization & Analysis
-- `utils_plot.py`: Provides plotting utilities for latent space clustering, risk distributions, and backtesting performance.
+- `custom_libraries/utils_plot.py`: Provides plotting utilities for latent space clustering, risk distributions, and backtesting performance.
 
 ---
 
