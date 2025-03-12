@@ -32,8 +32,6 @@ The goal is to measure Value at Risk (VaR) and Expected Shortfall (ES) to analyz
     - On day X, the final value represents the worst return observed over the 5-day window from X-1 to X+3.
     - This ensures that the GAN model is heavily conditioned on the worst observed market conditions.
 
----
-
 ### 2. Model Training
 #### Conditional Variational Autoencoder (cVAE)
 - **Encoder:** compresses financial returns into a latent space.
@@ -49,8 +47,6 @@ The goal is to measure Value at Risk (VaR) and Expected Shortfall (ES) to analyz
 - **Emphasis on worst-case scenarios:**  
   - The model assigns higher weight to negative values in `returns_sp500_roll_5`.
   - **Worst-Case Quantile Training:** The generator learns to prioritize the worst observed market downturns.
-
----
 
 ### 3. Scenario Generation & Stress Testing
 - The trained model generates `NUM_SCENARIOS` synthetic return paths.
@@ -72,8 +68,6 @@ stress_values = {
 - Only specified variables are altered.
 - All other real-world macroeconomic indicators remain unchanged.
 - The model then recalculates VaR and ES based on these new conditions.
-
----
 
 ### 4. Backtesting & Risk Analysis
 - The model is validated against real market data using two approaches:
