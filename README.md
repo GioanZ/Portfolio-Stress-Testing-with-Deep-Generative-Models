@@ -1,61 +1,44 @@
 # Portfolio Stress Testing
 
 ## Overview
-This project explores portfolio stress testing using deep generative models, specifically:
-- Conditional Variational Autoencoders (cVAE)
-- Conditional Wasserstein GAN with Gradient Penalty (WGAN-GP)
 
-The goal is to generate synthetic market scenarios conditioned on macroeconomic indicators and evaluate the risk exposure of a financial portfolio. Risk is assessed using:
-- Value at Risk (VaR)
-- Expected Shortfall (ES)
-- Distance metrics such as Earth Mover's Distance, Jensen-Shannon Divergence, and the Kolmogorov-Smirnov test
+This project implements portfolio stress testing using advanced deep generative models. It combines a Conditional Variational Autoencoder (cVAE) and a Conditional Wasserstein GAN with Gradient Penalty (WGAN-GP) to generate synthetic market scenarios conditioned on macroeconomic indicators. 
 
-### Why Stress Testing?
-Financial markets experience sudden crashes, such as the 2008 financial crisis or the COVID-19 pandemic. Traditional risk models assume normally distributed returns, which fail to capture extreme events. Generative models allow for simulating realistic crises and evaluating potential losses.
+The goal is to assess portfolio risk under extreme market conditions by simulating crisis scenarios that traditional models might miss.
 
-## Data
+## Project Components
 
-### Market Data
-- Source: [Yahoo Finance API](https://developer.yahoo.com/api/)
-- Portfolio: [Warren Buffett's 2019 Q4 portfolio](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=1)
-- Timeframe: Data is collected from 2000 to the end of 2024, but only the period from 2018 onward is considered, as many assets did not exist before that time
+- **Data Acquisition and Preprocessing:**  
+  Modules are provided for downloading market data via Yahoo Finance and macroeconomic data from the FRED API (and additional sources). Preprocessing functions handle scaling, forward-filling missing values, and aligning time series.
 
-### Macroeconomic Indicators
-- Source: Federal Reserve Economic Data ([FRED API](https://fred.stlouisfed.org/docs/api/fred/))
-   - Variables:
-      - Inflation Rate (CPIAUCSL)
-      - Federal Funds Rate (FEDFUNDS)
-      - Unemployment Rate (UNRATE)
-      - 3-Month Treasury Rate (DGS3MO)
-      - 10-Year Treasury Rate (DGS10)
-- Source: Yahoo Finance
-   - Variables:
-      - VIX Index (from Yahoo Finance)
-- Preprocessing: Forward-filled missing values and standardized features.
+- **Model Implementation:**  
+  - Conditional VAE: Encodes asset return distributions into a latent space and decodes conditional on macroeconomic indicators using custom layers (SamplingLayer, ReconstructionLossLayer, and KLDivergenceLayer).  
+  - Conditional WGAN-GP: Generates latent representations conditioned on macroeconomic indicators through adversarial training, with gradient penalty enforcing Lipschitz continuity.
 
-## Goals
+- **Stress Testing and Backtesting:**  
+  Functions for generating synthetic scenarios for individual dates, performing rolling backtests, and evaluating risk metrics at both portfolio and individual asset levels. Risk is measured using Value at Risk (VaR) and Expected Shortfall (ES).
 
-1. Train a Conditional Variational Autoencoder (cVAE)
-   - Encode asset return distributions into a latent space
-   - Generate synthetic return scenarios based on macroeconomic conditions
+- **Evaluation Metrics:**  
+  The project assesses model performance using Earth Mover’s Distance (EMD), Jensen-Shannon Divergence (JSD), and the Kolmogorov-Smirnov (KS) test.
 
-2. Train a Conditional WGAN-GP
-   - Generate synthetic latent representations conditioned on macroeconomic indicators
-   - Ensure realistic synthetic distributions through adversarial training with gradient penalty
+- **Visualization:**  
+  A suite of plotting utilities is available to visualize training progress, risk metrics over time, latent space clustering, and scenario distributions.
 
-3. Perform Portfolio Stress Testing
-   - Generate 1000 synthetic market scenarios
-   - Evaluate portfolio risk under stress using Value at Risk (VaR) and Expected Shortfall (ES)
-   - Compare synthetic and historical distributions with Earth Mover's Distance (EMD), Jensen-Shannon Divergence (JSD), and the Kolmogorov-Smirnov test
+## Data Sources
 
-4. Cluster Extreme Scenarios in Latent Space
-   - Use K-Means clustering to detect extreme financial regimes
-   - Identify outliers representing market crashes
+- **Market Data:**  
+  Downloaded via the [Yahoo Finance API](https://developer.yahoo.com/api/), this data includes asset prices and trading volumes.
 
-## Running the Code
+- **Macroeconomic Indicators:**  
+  Sourced from the Federal Reserve Economic Data ([FRED API](https://fred.stlouisfed.org/docs/api/fred/)) for variables such as inflation, federal funds rate, unemployment rate, and treasury rates. Additional indicators like the VIX and exchange rates (EUR/USD) are obtained from Yahoo Finance.
 
-### Requirements
-To run the code, install the required Python packages:
+- **Portfolio:**  
+  The analysis uses a portfolio based on [Warren Buffett’s Q4 2019 holdings](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=1).
+
+## Installation
+
+To install the required dependencies, run:
+
 ```bash
-pip install numpy pandas matplotlib yfinance fredapi tensorflow scikit-learn scipy
+pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-learn scipy
 ```
