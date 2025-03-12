@@ -2,36 +2,64 @@
 
 ## Overview
 
-This project implements portfolio stress testing using advanced deep generative models. It combines a Conditional Variational Autoencoder (cVAE) and a Conditional Wasserstein GAN with Gradient Penalty (WGAN-GP) to generate synthetic market scenarios conditioned on macroeconomic indicators. 
+This project implements **Portfolio Stress Testing** using **deep generative models** to assess portfolio risk under extreme market conditions. It combines:
 
-The goal is to assess portfolio risk under extreme market conditions by simulating crisis scenarios that traditional models might miss.
+- **Conditional Variational Autoencoder (cVAE)** to learn a latent representation of financial returns conditioned on macroeconomic indicators.
+- **Conditional Wasserstein GAN with Gradient Penalty (WGAN-GP)** to generate synthetic financial return scenarios, with a strong emphasis on **negative return roll scenarios**.
+
+The goal is to measure **Value at Risk (VaR)** and **Expected Shortfall (ES)** to analyze the portfolio's behavior under stress.
+
+---
 
 ## Project Workflow
 
-The key steps in this project are:
+### 1. Data Acquisition & Preprocessing
+- **Portfolio** used for analysis would be [Warren Buffett’s Q4 2019 holdings](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=1).
+- **Market Data** is collected from [Yahoo Finance](https://developer.yahoo.com/api/).
+- **Macroeconomic Indicators** are obtained from [FRED API](https://fred.stlouisfed.org/docs/api/fred/), including:
+  - Federal Funds Rate
+  - Inflation
+  - VIX Index
+  - Unemployment Rate
+  - Exchange Rates
+  - **5-day rolling worst-case return (`returns_sp500_roll_5`)**, which emphasizes **negative market scenarios in model training**.
 
-1. **Data Acquisition and Preprocessing:**  
-   - Market data is collected via Yahoo Finance, while macroeconomic indicators come from the FRED API.
-   - Preprocessing includes handling missing values, normalizing data, and aligning time series.
+- **Data Preprocessing:**
+  - **Log returns** are computed for financial assets.
+  - **Shifting of macroeconomic data:** To prevent lookahead bias, **macroeconomic indicators are shifted forward by one day**.
+  - **Feature scaling using StandardScaler**.
+  - **Additional shift for `returns_sp500_roll_5`**:  
+    - On day X, the final value represents **the worst return observed over the 5-day window from X-1 to X+3**.
+    - This ensures that the GAN model is **heavily conditioned on the worst observed market conditions**.
 
-2. **Model Training:**  
-   - A cVAE encodes asset returns into a latent space and reconstructs them based on macroeconomic conditions.
-   - A Conditional WGAN-GP generates synthetic returns by learning realistic latent representations through adversarial training.
+---
 
-3. **Scenario Generation and Stress Testing:**  
-   - The trained model generates `NUM_SCENARIOS` synthetic return paths.
-   - The 5% Value at Risk (VaR) is computed as the threshold for extreme scenarios.
-   - Stress testing is performed by modifying macroeconomic inputs to assess potential market shocks.
+### 2. Model Training
+#### Conditional Variational Autoencoder (cVAE)
+- **Encoder:** compresses financial returns into a latent space.
+- **Decoder:** reconstructs returns based on macroeconomic conditions.
+- **Loss Function:**
+  - **Reconstruction Loss (MSE + Tail Sensitivity):** optimized to reproduce extreme scenarios accurately.
+  - **KL Divergence Loss:** regularizes the latent space distribution.
 
-4. **Backtesting and Risk Analysis:**  
-   - The backtesting module evaluates how well the model predicts portfolio risk under different conditions.
-   - Two approaches can be used:
-     - Unbiased Backtesting: Uses actual historical macroeconomic values from the test period to evaluate the model's predictive accuracy.
-     - Stressed Scenario Backtesting: Specific macroeconomic inputs are manually modified, while all other variables retain their real test-period values.
+#### Conditional WGAN-GP
+- **Generator:** learns a **realistic latent representation of financial returns**, conditioned on macroeconomic indicators.
+- **Critic:** evaluates the quality of generated samples.
+- **Gradient Penalty:** enforces **Lipschitz continuity** for stable training.
+- **Emphasis on worst-case scenarios:**  
+  - The model **assigns higher weight to negative values in `returns_sp500_roll_5`**.
+  - **Worst-Case Quantile Training:** The generator learns to prioritize **the worst observed market downturns**.
 
-## Stress Testing Approach
+---
 
-Users can define stress conditions to simulate potential economic scenarios. For example:
+### 3. Scenario Generation & Stress Testing
+- The trained model generates **NUM_SCENARIOS** synthetic return paths.
+- Stress testing modifies only **specific** macroeconomic inputs while keeping others unchanged.
+- Portfolio risk is measured through:
+  - **Value at Risk (VaR)** (5% worst-case simulated returns)
+  - **Expected Shortfall (ES)**
+
+#### Example: Custom Stress Scenario
 
 ```python
 stress_values = {
@@ -41,51 +69,53 @@ stress_values = {
 }
 ```
 
-### Important Note:
-- Only the specified variables in `stress_values` are altered.
-- All other macroeconomic indicators remain as they were in the actual test period.
-- This allows users to analyze the impact of individual shocks while keeping other real-world factors constant.
+- **Only specified variables are altered.**
+- **All other real-world macroeconomic indicators remain unchanged.**
+- The model then **recalculates VaR and ES based on these new conditions**.
 
-In the above example:
-- The model assumes an SP500 drop of 20% and recalculates the impact on the portfolio.
-- The VIX is set to 99, indicating high uncertainty.
-- Unemployment is raised to 20%, reflecting a deep recession.
+---
 
-The model then re-generates asset returns based on these inputs and recalculates VaR and ES, helping to assess the portfolio's resilience under extreme stress.
+### 4. Backtesting & Risk Analysis
+- The model is validated against real market data using two approaches:
+  - **Unbiased Backtesting:** Uses historical macroeconomic values.
+  - **Stressed Scenario Backtesting:** Manually alters selected macroeconomic factors.
+- **Performance Metrics:**
+  - **Kolmogorov-Smirnov (KS) Test**
+  - **Jensen-Shannon Divergence (JSD)**
+  - **Earth Mover’s Distance (EMD)**
+
+---
 
 ## Project Components
+### 1. Preprocessing Modules
+- `preprocess_data.py`: Handles data acquisition, missing values, and feature engineering.
+- **`returns_sp500_roll_5`** is crucial for generating crisis scenarios.
 
-- **Data Acquisition and Preprocessing:**  
-  Modules are provided for downloading market data via Yahoo Finance and macroeconomic data from the FRED API (and additional sources). Preprocessing functions handle scaling, forward-filling missing values, and aligning time series.
+### 2. Model Implementation
+- `custom_vae.py`: Implements **cVAE** (encoder, decoder, loss layers).
+- `custom_wgangp.py`: Defines the **Conditional WGAN-GP** (generator, critic, loss functions).
 
-- **Model Implementation:**  
-  - Conditional VAE: Encodes asset return distributions into a latent space and decodes conditional on macroeconomic indicators using custom layers (SamplingLayer, ReconstructionLossLayer, and KLDivergenceLayer).  
-  - Conditional WGAN-GP: Generates latent representations conditioned on macroeconomic indicators through adversarial training, with gradient penalty enforcing Lipschitz continuity.
+### 3. Stress Testing & Evaluation
+- `stress_backtesting.py`: Simulates extreme market conditions.
+- `metrics_validation.py`: Computes **VaR, ES, and divergence scores**.
+- `utils_stress_testing.py`: Validates synthetic scenarios.
 
-- **Stress Testing and Backtesting:**  
-  Functions for generating synthetic scenarios for individual dates, performing rolling backtests, and evaluating risk metrics at both portfolio and individual asset levels. Risk is measured using Value at Risk (VaR) and Expected Shortfall (ES).
+### 4. Visualization & Analysis
+- `utils_plot.py`: Provides plotting utilities for **latent space clustering, risk distributions, and backtesting performance**.
 
-- **Evaluation Metrics:**  
-  The project assesses model performance using Earth Mover’s Distance (EMD), Jensen-Shannon Divergence (JSD), and the Kolmogorov-Smirnov (KS) test.
+---
 
-- **Visualization:**  
-  A suite of plotting utilities is available to visualize training progress, risk metrics over time, latent space clustering, and scenario distributions.
-
-## Data Sources
-
-- **Market Data:**  
-  Downloaded via the [Yahoo Finance API](https://developer.yahoo.com/api/), this data includes asset prices and trading volumes.
-
-- **Macroeconomic Indicators:**  
-  Sourced from the Federal Reserve Economic Data ([FRED API](https://fred.stlouisfed.org/docs/api/fred/)) for variables such as inflation, federal funds rate, unemployment rate, and treasury rates. Additional indicators like the VIX and exchange rates (EUR/USD) are obtained from Yahoo Finance.
-
-- **Portfolio:**  
-  The analysis uses a portfolio based on [Warren Buffett’s Q4 2019 holdings](https://valuesider.com/guru/warren-buffett-berkshire-hathaway/portfolio/2019/4?sort=-percent_portfolio&sells_page=1&page=1).
-
-## Installation
+## Installation & GPU Setup
 
 To install the required dependencies, run:
 
 ```bash
 pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-learn scipy
 ```
+
+---
+
+## Conclusion
+This project provides an **advanced framework for Portfolio Stress Testing** using **deep generative models**.  
+The approach **prioritizes worst-case scenarios**, leveraging `returns_sp500_roll_5` to condition the models on **extreme negative events**, making it particularly useful for **risk management and volatility assessment**.
+
