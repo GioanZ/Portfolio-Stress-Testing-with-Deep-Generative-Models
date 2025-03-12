@@ -104,16 +104,6 @@ stress_values = {
 
 ---
 
-## Installation
-
-To install the required dependencies, run:
-
-```bash
-pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-learn scipy
-```
-
----
-
 ## Explanation of Key Parameters
 
 ### General Settings
@@ -163,6 +153,34 @@ pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-l
 
 - `END_DATE = "2021-01-01"`  
   The final date set provides a post-crisis context and allowing for a broader analysis of market recovery.
+
+---
+
+## Installation
+
+To install the required dependencies, run:
+
+```bash
+pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-learn scipy
+```
+
+---
+
+## Execution
+
+### Set Up FRED API Key
+This project requires an **API key** from the [FRED API](https://fred.stlouisfed.org/docs/api/api_key.html) to access macroeconomic data.  
+
+#### Steps to Configure
+1. Register for an API key on [FRED’s website](https://fred.stlouisfed.org/docs/api/api_key.html).  
+2. Create a text file named `fred_api_key.txt` in the root directory of the project.  
+3. Save your API key inside the file without any extra characters or spaces.
+
+Example:  
+```txt
+your_fred_api_key_here
+```
+Now you are ready to use the code! The script `download_data.py` will automatically read the key from this file.
 
 ---
 
