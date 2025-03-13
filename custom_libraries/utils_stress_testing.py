@@ -1,3 +1,19 @@
+"""
+Copyright:
+    Portfolio Stress Testing with Deep Generative Models
+    github.com/GioanZ
+Disclaimer:
+    This software is for research and educational purposes only.
+    It is NOT intended for actual financial decision-making or investment strategies.
+    The authors assume no liability for any losses or damages arising from the use
+    of this code. Users should conduct their own due diligence before making financial
+    decisions.
+
+    This project utilizes deep generative models to simulate financial stress testing.
+    The models are trained on historical market and macroeconomic data, but all results
+    should be interpreted with caution.
+"""
+
 import numpy as np
 
 import tensorflow as tf
@@ -31,17 +47,6 @@ def generate_synthetic_scenarios(
     synthetic_returns = returns_scaler.inverse_transform(synthetic_returns_scaled)
 
     return synthetic_returns, generated_latent, macro_conditions_sample
-
-
-"""
-def compute_var_es(returns, portfolio_weights, alpha=5):
-    portfolio_returns = np.dot(returns, portfolio_weights)
-    var_threshold = np.percentile(portfolio_returns, alpha)
-    extreme_scenarios = returns[portfolio_returns <= var_threshold]
-    es = np.mean(portfolio_returns[portfolio_returns <= var_threshold])
-
-    return extreme_scenarios, var_threshold, es, portfolio_returns
-"""
 
 
 def compare_distributions(

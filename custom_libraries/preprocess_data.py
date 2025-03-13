@@ -1,3 +1,19 @@
+"""
+Copyright:
+    Portfolio Stress Testing with Deep Generative Models
+    github.com/GioanZ
+Disclaimer:
+    This software is for research and educational purposes only.
+    It is NOT intended for actual financial decision-making or investment strategies.
+    The authors assume no liability for any losses or damages arising from the use
+    of this code. Users should conduct their own due diligence before making financial
+    decisions.
+
+    This project utilizes deep generative models to simulate financial stress testing.
+    The models are trained on historical market and macroeconomic data, but all results
+    should be interpreted with caution.
+"""
+
 import pandas as pd
 import numpy as np
 
@@ -63,15 +79,47 @@ def preprocess_macro_data_delete(
     )
 
 
-# TODO
-# The denominator is the SP500 price from yesterday (day X–1)
-# The numerator is the minimum SP500 price observed in the window from day X–1 up to day X+3
-# In practical terms, the final value on day X represents the worst (lowest) return you’d have
-# seen over a 5‑day window starting with yesterday’s value, with the idea of capturing potential
-# drawdowns.
 def preprocess_macro_data(
     macro_df, vix_data, fx_data, sp500_data, start_date, end_date, desired_index
 ):
+    """
+    Preprocesses macroeconomic and market data for portfolio stress testing by integrating
+    key financial indicators, computing SP500-based risk-sensitive metrics, and ensuring
+    proper data alignment.
+
+    Key Features:
+    1. Merging Macroeconomic Indicators
+       - Combines `macro_df` (FRED data) with VIX and FX rates (if available).
+
+    2. SP500 Return Computation:
+       - Computes log returns of SP500 as:
+         returns_sp500 = log(SP500_t / SP500_t-1)
+
+    3. Rolling Worst-Case SP500 Return (5-Day Window):
+       - Constructs a drawdown-sensitive metric (`returns_sp500_roll_5`) that captures
+         the worst observed SP500 return over a 5-day window:
+         - Denominator SP500 price from yesterday (X-1)
+         - Numerator: Lowest SP500 price observed from yesterday (X-1) to X+3
+         - The final value on day X represents the worst return observed
+           in this window, ensuring potential drawdowns are captured.
+       - Any positive values in `returns_sp500_roll_5` are set to zero
+         as only negative movements are relevant for stress testing.
+
+    4. Data Alignment and Lookahead Bias Prevention:
+       - The dataset is reindexed to match the `desired_index`.
+       - One-day shift applied to avoid lookahead bias (ensuring that data
+         used for predictions is only based on past information).
+
+    5. Missing Value Handling:
+       - Forward-fills missing values (`ffill()`) after the shift to maintain consistency.
+
+    ### Returns:
+    - `pd.DataFrame`: The processed macroeconomic dataset, including:
+      - SP500 log returns (`returns_sp500`)
+      - 5-day rolling worst-case returns (`returns_sp500_roll_5
+      - Shifted and aligned macroeconomic features ready for modeling
+    """
+
     # Concatenate vix_data (and fx_data if available)
     if fx_data is None:
         macro_df = pd.concat([macro_df, vix_data], axis=1)
