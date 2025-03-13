@@ -1,3 +1,19 @@
+<!--
+Copyright:
+    Portfolio Stress Testing with Deep Generative Models
+    github.com/GioanZ
+Disclaimer:
+    This software is for research and educational purposes only.
+    It is NOT intended for actual financial decision-making or investment strategies.
+    The authors assume no liability for any losses or damages arising from the use
+    of this code. Users should conduct their own due diligence before making financial
+    decisions.
+
+    This project utilizes deep generative models to simulate financial stress testing.
+    The models are trained on historical market and macroeconomic data, but all results
+    should be interpreted with caution.
+-->
+
 # Portfolio Stress Testing with Deep Generative Models
 
 ## Overview
