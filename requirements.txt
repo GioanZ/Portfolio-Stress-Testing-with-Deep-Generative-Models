@@ -1,7 +1,7 @@
 fredapi==0.5.2
 matplotlib==3.10.1
-pandas==2.2.3
 numpy==1.26.4
+pandas==2.2.3
 scikit-learn==1.6.1
 scipy==1.15.2
 seaborn==0.13.2
