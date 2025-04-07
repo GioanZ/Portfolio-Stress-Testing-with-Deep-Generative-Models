@@ -153,6 +153,7 @@ def rolling_backtest(
                     "hist_portfolio_return": hist_portfolio_return,
                     "synthetic_VaR": var_synth,
                     "synthetic_ES": es_synth,
+                    "synthetic_returns": synthetic_portfolio_returns.tolist(),
                 }
             )
 

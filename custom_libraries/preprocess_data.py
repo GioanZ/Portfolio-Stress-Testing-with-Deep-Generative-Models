@@ -23,6 +23,9 @@ from custom_libraries.utils_plot import (
     plot_missing_values,
 )
 
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+
 
 def preprocess_market_data(market_data, start_date, backtest_start, backtest_end):
     close_data = market_data["Close"]

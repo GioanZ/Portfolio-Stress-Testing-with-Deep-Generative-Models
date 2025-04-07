@@ -22,6 +22,9 @@ from tensorflow.keras import layers, backend as K
 
 import tensorflow_probability as tfp
 
+SEED_RANDOM = 29
+tf.random.set_seed(SEED_RANDOM)
+
 """ Define custom layers: Sampling, Reconstruction Loss, KL Divergence """
 
 

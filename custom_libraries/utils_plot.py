@@ -25,6 +25,10 @@ from custom_libraries.utils_stress_testing import (
     cluster_extreme_latent,
 )
 
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+tf.random.set_seed(SEED_RANDOM)
+
 
 def plot_missing_values(df, title="Missing Values Heatmap"):
     plt.figure(figsize=(10, 6))
@@ -415,5 +419,16 @@ def plot_latent_space_clustering(
     plt.xlabel("Latent 1")
     plt.ylabel("Latent 2")
     plt.title("Clustering of Synthetic Scenarios in Latent Space")
+    plt.legend()
+    plt.show()
+
+
+def plot_tail_histogram(real_tail, synthetic_tail):
+    plt.figure(figsize=(10, 5))
+    plt.hist(real_tail, bins=50, alpha=0.5, density=True, label="Real Tail")
+    plt.hist(synthetic_tail, bins=50, alpha=0.5, density=True, label="Synthetic Tail")
+    plt.title("Tail Distribution Comparison (Density)")
+    plt.xlabel("Returns")
+    plt.ylabel("Density")
     plt.legend()
     plt.show()

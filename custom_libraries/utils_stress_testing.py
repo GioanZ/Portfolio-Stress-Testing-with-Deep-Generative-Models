@@ -28,6 +28,10 @@ from .metrics_validation import (
     select_extreme_scenarios,
 )
 
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+tf.random.set_seed(SEED_RANDOM)
+
 
 def generate_synthetic_scenarios(
     generator, decoder, macro_train_scaled, returns_scaler, noise_dim, num_samples

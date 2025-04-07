@@ -17,6 +17,9 @@ Disclaimer:
 import numpy as np
 from scipy.stats import entropy
 
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+
 
 def compute_portfolio_returns(returns_array, weights):
     return returns_array.dot(weights)

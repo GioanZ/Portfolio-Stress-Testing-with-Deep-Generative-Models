@@ -17,6 +17,9 @@ Disclaimer:
 import os
 import tensorflow as tf
 
+SEED_RANDOM = 29
+tf.random.set_seed(SEED_RANDOM)
+
 GPU_MEMORY_LIMITS = {1: 1024, 2: 2048, 3: 3072, 4: 4096, 6: 6144, 8: 8192, 12: 12288}
 
 
