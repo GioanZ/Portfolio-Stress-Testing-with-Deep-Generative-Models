@@ -211,7 +211,7 @@ YOUR_FOLDER/
 To install the required dependencies, run:
 
 ```bash
-pip install numpy pandas matplotlib seaborn yfinance fredapi tensorflow scikit-learn scipy
+pip install -r requirements.txt
 ```
 
 ---
