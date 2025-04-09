@@ -122,10 +122,40 @@ stress_values = {
 
 ---
 
+## Project Structure
+
+YOUR_FOLDER/
+├── custom_libraries/
+│   ├── custom_vae.py
+│   ├── custom_wgangp.py
+│   ├── custome_layer.py
+│   ├── download_data.py
+│   ├── metrics_validation.py
+│   ├── preprocess_data.py
+│   ├── start_gpu.py
+│   ├── stress_backtesting.py
+│   ├── utils_plot.py
+│   ├── utils_stress_testing.py
+│   └── utils.py
+├── models/
+│   ├── critic_model.keras
+│   ├── cvae_model.keras
+│   ├── decoder_model.keras
+│   ├── encoder_model.keras
+│   └── generator_model.keras
+├── .gitignore
+├── key_fred.txt
+├── portfolio.csv
+├── README.md
+├── requirements.txt
+└── stress_testing.ipynb
+
+---
+
 ## Explanation of Key Parameters
 
 ### General Settings
-- `SEED_RANDOM = 101`  
+- `SEED_RANDOM = 29`  
   Ensures reproducibility across runs. By fixing a random seed, operations like weight initialization, data shuffling, and noise generation will produce consistent results.
 
 - `LOAD_MODEL = False`  
@@ -198,7 +228,7 @@ Example:
 ```txt
 your_fred_api_key_here
 ```
-Now you are ready to use the code! The script `custom_libraries/download_data.py` will automatically read the key from this file.
+Now you are ready to use the code! The script `custom_libraries/download_data.py` will automatically read the key from this file (but remember to follow the structure mentioned earlier).
 
 ---
 
