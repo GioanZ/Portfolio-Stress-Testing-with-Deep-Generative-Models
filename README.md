@@ -124,6 +124,7 @@ stress_values = {
 
 ## Project Structure
 
+```lua
 YOUR_FOLDER/
 ├── custom_libraries/
 │   ├── custom_vae.py
@@ -149,6 +150,7 @@ YOUR_FOLDER/
 ├── README.md
 ├── requirements.txt
 └── stress_testing.ipynb
+```
 
 ---
 
