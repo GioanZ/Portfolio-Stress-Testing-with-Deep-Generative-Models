@@ -208,6 +208,13 @@ YOUR_FOLDER/
 
 ## Installation
 
+I use Python version 3.12.4:
+
+```bash
+python3.12 --version
+# Output: Python 3.12.4
+```
+
 To install the required dependencies, run:
 
 ```bash
