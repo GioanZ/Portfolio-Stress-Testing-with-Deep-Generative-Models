@@ -1,3 +1,5 @@
+# custom_libraries/custom_wgangp.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models

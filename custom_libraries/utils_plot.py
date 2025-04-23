@@ -1,3 +1,5 @@
+# custom_libraries/utils_plot.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models
@@ -172,6 +174,7 @@ def plot_historical_vs_synthetic_var_period(backtest_df):
         backtest_df["synthetic_VaR"],
         label="Worst Case Scenario",
         linestyle="--",
+        color="red",
     )
     plt.xlabel("Forecast Date")
     plt.ylabel("Return")
@@ -431,4 +434,17 @@ def plot_tail_histogram(real_tail, synthetic_tail):
     plt.xlabel("Returns")
     plt.ylabel("Density")
     plt.legend()
+    plt.show()
+
+
+def plot_series(items, title, ylabel):
+    plt.figure(figsize=(12, 6))
+    for label, series, style, color in items:
+        plt.plot(series.index, series, style, label=label, color=color)
+    plt.title(title)
+    plt.xlabel("Date")
+    plt.ylabel(ylabel)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
     plt.show()
