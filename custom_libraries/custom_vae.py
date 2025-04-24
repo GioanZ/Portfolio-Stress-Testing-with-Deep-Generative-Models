@@ -55,7 +55,7 @@ def build_conditional_vae(input_dim, macro_dim, intermediate_dim=256, latent_dim
     cvae.compile(optimizer="adam")
 
     early_stop = EarlyStopping(
-        monitor="val_loss", patience=10, restore_best_weights=True
+        monitor="val_loss", patience=30, restore_best_weights=True
     )
 
     return encoder, decoder, cvae, early_stop

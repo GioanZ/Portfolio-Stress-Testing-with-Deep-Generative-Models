@@ -67,11 +67,8 @@ def plot_stock_returns(returns):
     plt.show()
 
 
-import matplotlib.pyplot as plt
-
-
 def plot_macro_trend(macro_df):
-    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(12, 12), sharex=True)
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 6), sharex=True)
 
     # Top subplot: Inflation, Fed Funds, Unemployment, VIX
     ax1 = axes[0]
@@ -104,6 +101,7 @@ def plot_macro_trend(macro_df):
     ax1.legend(loc="upper left")
     ax1.set_title("Macro Trends Over Time")
 
+    """
     # Middle subplot: SP500
     ax2 = axes[1]
     ax2.set_ylabel("SP500", color="blue")
@@ -111,9 +109,10 @@ def plot_macro_trend(macro_df):
     ax2.tick_params(axis="y", labelcolor="blue")
     ax2.legend(loc="upper left")
     ax2.set_title("SP500 Market Trend")
+    """
 
     # Bottom subplot: Short-Term & Long-Term Rates
-    ax3 = axes[2]
+    ax3 = axes[1]
     ax3.set_ylabel("Interest Rates", color="black")
     ax3.plot(
         macro_df.index,
@@ -143,6 +142,19 @@ def plot_macro_trend(macro_df):
     # Formatting
     plt.xlabel("Date")
     plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_cvae_losses(history):
+    plt.figure(figsize=(10, 6))
+    plt.plot(history.history["loss"], label="Training Loss")
+    plt.plot(history.history["val_loss"], label="Validation Loss")
+    plt.title("CVAE Training and Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
     plt.tight_layout()
     plt.show()
 

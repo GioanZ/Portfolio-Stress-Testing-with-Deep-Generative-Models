@@ -51,80 +51,9 @@ def preprocess_market_data(market_data, start_date, backtest_start, backtest_end
     )
 
 
-def preprocess_macro_data_delete(
-    macro_df,
-    returns_train,
-    returns_test,
-    start_date,
-    backtest_start,
-    backtest_end,
-):
-    macro_df_shifted = macro_df.shift(1)
-    macro_df_shifted = macro_df_shifted.fillna(method="ffill")
-    macro_df_shifted = macro_df_shifted.loc[start_date:backtest_end]
-
-    macro_train = macro_df_shifted.loc[start_date:backtest_start]
-    macro_test = macro_df_shifted.loc[backtest_start:backtest_end]
-
-    macro_train = macro_train.reindex(returns_train.index)
-    macro_test = macro_test.reindex(returns_test.index)
-
-    # Scale macro indicators
-    macro_scaler = StandardScaler()
-    macro_train_scaled = macro_scaler.fit_transform(macro_train)
-    macro_test_scaled = macro_scaler.transform(macro_test)
-
-    return (
-        macro_df,
-        macro_train,
-        macro_test,
-        macro_train_scaled,
-        macro_test_scaled,
-        macro_scaler,
-    )
-
-
 def preprocess_macro_data(
     macro_df, vix_data, fx_data, sp500_data, start_date, end_date, desired_index
 ):
-    """
-    Preprocesses macroeconomic and market data for portfolio stress testing by integrating
-    key financial indicators, computing SP500-based risk-sensitive metrics, and ensuring
-    proper data alignment.
-
-    Key Features:
-    1. Merging Macroeconomic Indicators
-       - Combines `macro_df` (FRED data) with VIX and FX rates (if available).
-
-    2. SP500 Return Computation:
-       - Computes log returns of SP500 as:
-         returns_sp500 = log(SP500_t / SP500_t-1)
-
-    3. Rolling Worst-Case SP500 Return (5-Day Window):
-       - Constructs a drawdown-sensitive metric (`returns_sp500_roll_5`) that captures
-         the worst observed SP500 return over a 5-day window:
-         - Denominator SP500 price from yesterday (X-1)
-         - Numerator: Lowest SP500 price observed from yesterday (X-1) to X+3
-         - The final value on day X represents the worst return observed
-           in this window, ensuring potential drawdowns are captured.
-       - Any positive values in `returns_sp500_roll_5` are set to zero
-         as only negative movements are relevant for stress testing.
-
-    4. Data Alignment and Lookahead Bias Prevention:
-       - The dataset is reindexed to match the `desired_index`.
-       - One-day shift applied to avoid lookahead bias (ensuring that data
-         used for predictions is only based on past information).
-
-    5. Missing Value Handling:
-       - Forward-fills missing values (`ffill()`) after the shift to maintain consistency.
-
-    ### Returns:
-    - `pd.DataFrame`: The processed macroeconomic dataset, including:
-      - SP500 log returns (`returns_sp500`)
-      - 5-day rolling worst-case returns (`returns_sp500_roll_5
-      - Shifted and aligned macroeconomic features ready for modeling
-    """
-
     # Concatenate vix_data (and fx_data if available)
     if fx_data is None:
         macro_df = pd.concat([macro_df, vix_data], axis=1)
@@ -156,8 +85,8 @@ def preprocess_macro_data(
 
     # plot_missing_values(macro_df, "Missing Values in Macro Data (Pre-Processing)")
 
-    # Shift macro data by one day (to avoid lookahead bias)
-    macro_df_shifted = macro_df.shift(1)
+    # Shift macro data by one day
+    macro_df_shifted = macro_df.shift(-1)
     macro_df_shifted = macro_df_shifted.fillna(method="ffill")
     macro_df_shifted = macro_df_shifted.loc[start_date:end_date]
 
