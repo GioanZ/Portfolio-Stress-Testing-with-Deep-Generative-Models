@@ -1,3 +1,5 @@
+# custom_libraries/utils_plot.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models
@@ -24,6 +26,10 @@ import tensorflow as tf
 from custom_libraries.utils_stress_testing import (
     cluster_extreme_latent,
 )
+
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+tf.random.set_seed(SEED_RANDOM)
 
 
 def plot_missing_values(df, title="Missing Values Heatmap"):
@@ -61,11 +67,8 @@ def plot_stock_returns(returns):
     plt.show()
 
 
-import matplotlib.pyplot as plt
-
-
 def plot_macro_trend(macro_df):
-    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(12, 12), sharex=True)
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 6), sharex=True)
 
     # Top subplot: Inflation, Fed Funds, Unemployment, VIX
     ax1 = axes[0]
@@ -98,6 +101,7 @@ def plot_macro_trend(macro_df):
     ax1.legend(loc="upper left")
     ax1.set_title("Macro Trends Over Time")
 
+    """
     # Middle subplot: SP500
     ax2 = axes[1]
     ax2.set_ylabel("SP500", color="blue")
@@ -105,9 +109,10 @@ def plot_macro_trend(macro_df):
     ax2.tick_params(axis="y", labelcolor="blue")
     ax2.legend(loc="upper left")
     ax2.set_title("SP500 Market Trend")
+    """
 
     # Bottom subplot: Short-Term & Long-Term Rates
-    ax3 = axes[2]
+    ax3 = axes[1]
     ax3.set_ylabel("Interest Rates", color="black")
     ax3.plot(
         macro_df.index,
@@ -141,6 +146,19 @@ def plot_macro_trend(macro_df):
     plt.show()
 
 
+def plot_cvae_losses(history):
+    plt.figure(figsize=(10, 6))
+    plt.plot(history.history["loss"], label="Training Loss")
+    plt.plot(history.history["val_loss"], label="Validation Loss")
+    plt.title("CVAE Training and Validation Loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
 def plot_gan_losses(gen_losses, critic_losses, val_losses):
     plt.figure(figsize=(10, 6))
     plt.plot(gen_losses, label="Generator Loss")
@@ -168,6 +186,7 @@ def plot_historical_vs_synthetic_var_period(backtest_df):
         backtest_df["synthetic_VaR"],
         label="Worst Case Scenario",
         linestyle="--",
+        color="red",
     )
     plt.xlabel("Forecast Date")
     plt.ylabel("Return")
@@ -416,4 +435,28 @@ def plot_latent_space_clustering(
     plt.ylabel("Latent 2")
     plt.title("Clustering of Synthetic Scenarios in Latent Space")
     plt.legend()
+    plt.show()
+
+
+def plot_tail_histogram(real_tail, synthetic_tail):
+    plt.figure(figsize=(10, 5))
+    plt.hist(real_tail, bins=50, alpha=0.5, density=True, label="Real Tail")
+    plt.hist(synthetic_tail, bins=50, alpha=0.5, density=True, label="Synthetic Tail")
+    plt.title("Tail Distribution Comparison (Density)")
+    plt.xlabel("Returns")
+    plt.ylabel("Density")
+    plt.legend()
+    plt.show()
+
+
+def plot_series(items, title, ylabel):
+    plt.figure(figsize=(12, 6))
+    for label, series, style, color in items:
+        plt.plot(series.index, series, style, label=label, color=color)
+    plt.title(title)
+    plt.xlabel("Date")
+    plt.ylabel(ylabel)
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
     plt.show()

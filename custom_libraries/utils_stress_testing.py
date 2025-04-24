@@ -1,3 +1,5 @@
+# custom_libraries/utils_stress_testing.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models
@@ -27,6 +29,10 @@ from .metrics_validation import (
     jensen_shannon_divergence,
     select_extreme_scenarios,
 )
+
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+tf.random.set_seed(SEED_RANDOM)
 
 
 def generate_synthetic_scenarios(

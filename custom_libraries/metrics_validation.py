@@ -1,3 +1,5 @@
+# custom_libraries/metrics_validation.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models
@@ -16,6 +18,9 @@ Disclaimer:
 
 import numpy as np
 from scipy.stats import entropy
+
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
 
 
 def compute_portfolio_returns(returns_array, weights):

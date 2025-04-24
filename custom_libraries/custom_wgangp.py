@@ -1,3 +1,5 @@
+# custom_libraries/custom_wgangp.py
+
 """
 Copyright:
     Portfolio Stress Testing with Deep Generative Models
@@ -19,6 +21,10 @@ import numpy as np
 import tensorflow as tf
 
 from tensorflow.keras import layers, Model
+
+SEED_RANDOM = 29
+np.random.seed(SEED_RANDOM)
+tf.random.set_seed(SEED_RANDOM)
 
 
 def build_conditional_generator(noise_dim, macro_dim, latent_dim):
