@@ -5,6 +5,7 @@ pandas==2.2.3
 scikit-learn==1.6.1
 scipy==1.15.2
 seaborn==0.13.2
+statsmodels==0.14.4
 tensorflow==2.16.1
 tensorflow-io-gcs-filesystem==0.37.1
 tensorflow-probability==0.24.0
