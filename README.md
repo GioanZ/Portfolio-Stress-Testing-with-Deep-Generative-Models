@@ -173,10 +173,10 @@ YOUR_FOLDER/
   Directory where trained models are saved or loaded from.
 
 ### Model Training Parameters
-- `EPOCHS_WGAN = 1000`  
+- `EPOCHS_WGAN = 200`  
   Number of training epochs for the Conditional WGAN-GP. A higher value is chosen to allow adversarial training to converge properly.
 
-- `EPOCHS_CVAE = 500`  
+- `EPOCHS_CVAE = 100`  
   Number of training epochs for the Conditional VAE. This is lower than for the WGAN-GP, as VAEs generally converge faster.
 
 - `LATENT_DIM = 8`  
@@ -185,8 +185,8 @@ YOUR_FOLDER/
 - `NOISE_DIM = 10`  
   The dimension of the noise vector input for the WGAN-GP generator ensures diverse scenario generation.
 
-- `WGANGP_PATIENCE = 400`  
-  Early stopping patience for WGAN-GP training. If no validation improvement is observed for 400 epochs, training stops to prevent overfitting and save resources.
+- `WGANGP_PATIENCE = 50`  
+  Early stopping patience for WGAN-GP training. If no validation improvement is observed for 50 epochs, training stops to prevent overfitting and save resources.
 
 - `NUM_SCENARIOS = 10000`  
   The number of synthetic market scenarios generated for stress testing. A large sample size improves reliability in risk metrics.

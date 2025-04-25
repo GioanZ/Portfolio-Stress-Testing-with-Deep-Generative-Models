@@ -87,6 +87,7 @@ def preprocess_macro_data(
 
     # Shift macro data by one day
     macro_df_shifted = macro_df.shift(-1)
+    macro_df_shifted["returns_sp500_roll_5"] = macro_df["returns_sp500_roll_5"].shift(1)
     macro_df_shifted = macro_df_shifted.fillna(method="ffill")
     macro_df_shifted = macro_df_shifted.loc[start_date:end_date]
 

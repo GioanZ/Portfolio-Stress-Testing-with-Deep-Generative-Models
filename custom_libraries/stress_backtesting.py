@@ -82,6 +82,7 @@ def rolling_backtest(
     portfolio_weights=None,
     stress_values=None,
     by_ticker=False,
+    positive_part=False,
 ):
     """
     Performs rolling backtesting
@@ -124,7 +125,8 @@ def rolling_backtest(
 
             for stock in synthetic_returns_df.columns:
                 stock_returns = synthetic_returns_df[stock]
-                stock_returns = np.where(stock_returns > 0, 0, stock_returns)
+                if not positive_part:
+                    stock_returns = np.where(stock_returns > 0, 0, stock_returns)
                 var_synth, es_synth = calculate_var_es(stock_returns, alpha=5)
                 var_synth_dict[f"synthetic_VaR_{stock}"] = var_synth
                 es_synth_dict[f"synthetic_ES_{stock}"] = es_synth
@@ -144,9 +146,10 @@ def rolling_backtest(
         else:
             # Compute portfolio returns
             synthetic_portfolio_returns = synthetic_returns_df.dot(portfolio_weights)
-            synthetic_portfolio_returns = np.where(
-                synthetic_portfolio_returns > 0, 0, synthetic_portfolio_returns
-            )
+            if not positive_part:
+                synthetic_portfolio_returns = np.where(
+                    synthetic_portfolio_returns > 0, 0, synthetic_portfolio_returns
+                )
             var_synth, es_synth = calculate_var_es(synthetic_portfolio_returns, alpha=5)
             hist_portfolio_return = returns_test.loc[forecast_date].dot(
                 portfolio_weights

@@ -172,7 +172,7 @@ def plot_gan_losses(gen_losses, critic_losses, val_losses):
     plt.show()
 
 
-def plot_historical_vs_synthetic_var_period(backtest_df):
+def plot_historical_vs_synthetic_var_period(backtest_df, positive_val=False):
     # Plot the historical portfolio returns and synthetic VaR over the backtest period
     plt.figure(figsize=(12, 6))
     plt.plot(
@@ -190,7 +190,12 @@ def plot_historical_vs_synthetic_var_period(backtest_df):
     )
     plt.xlabel("Forecast Date")
     plt.ylabel("Return")
-    plt.title("Rolling Backtest: Historical Returns vs. Worst Case Scenario")
+    if positive_val:
+        plt.title(
+            "Rolling Backtest: Historical Returns vs. Worst Case Scenario (Also Positive Value)"
+        )
+    else:
+        plt.title("Rolling Backtest: Historical Returns vs. Worst Case Scenario")
     plt.legend()
     plt.xticks(rotation=45)
     plt.tight_layout()
@@ -316,16 +321,34 @@ def plot_bar_diff(hist_returns, synthetic_vars, tickers):
     """
     Difference (synthetic VaR - historical return) for each ticker
     """
-    diff = np.array(synthetic_vars) - np.array(hist_returns)
+    hist = np.array(hist_returns)
+    synth = np.array(synthetic_vars)
+    mask = hist < 0
+
+    filtered_hist = hist[mask]
+    filtered_synth = synth[mask]
+    filtered_tickers = np.array(tickers)[mask]
+    diff = filtered_synth - filtered_hist
+    mean_diff = diff.mean()
+
     colors = ["red" if d > 0 else "green" for d in diff]
 
     plt.figure(figsize=(14, 6))
-    plt.bar(tickers, diff, color=colors)
+    plt.bar(filtered_tickers, diff, color=colors)
     plt.xlabel("Ticker")
     plt.ylabel("Synthetic Worst Case Scenario - Actual Return")
     plt.title(
         "Difference between Synthetic Worst Case Scenario and Actual Return per Ticker"
     )
+    plt.axhline(0, color="black", linewidth=0.8)
+    plt.axhline(
+        mean_diff,
+        color="blue",
+        linestyle="--",
+        linewidth=1.2,
+        label=f"Mean diff = {mean_diff:.3f}",
+    )
+    plt.legend()
     plt.xticks(rotation=45)
     plt.axhline(0, color="black", linewidth=0.8)
     plt.grid(True, linestyle="--", alpha=0.7)
@@ -376,13 +399,21 @@ def plot_scatter_actual_vs_synthetic_oblique(hist_returns, synthetic_vars, ticke
     """
     Plots a scatter plot comparing the mean historical return with the mean synthetic VaR
     """
+    hist = np.array(hist_returns)
+    synth = np.array(synthetic_vars)
+    mask = hist < 0
+
+    filtered_hist = hist[mask]
+    filtered_synth = synth[mask]
+    filtered_tickers = np.array(tickers)[mask]
+
     plt.figure(figsize=(12, 6))
     plt.scatter(hist_returns, synthetic_vars, color="orange", s=60)
 
-    min_val = min(min(hist_returns), min(synthetic_vars))
-    max_val = max(max(hist_returns), max(synthetic_vars))
-    plt.plot([min_val, max_val], [min_val, max_val], "k--")
-    for i, ticker in enumerate(tickers):
+    min_val = min(filtered_hist.min(), filtered_synth.min())
+    max_val = max(filtered_hist.max(), filtered_synth.max())
+    plt.plot([min_val, max_val], [min_val, max_val], "k--", linewidth=0.8)
+    for i, ticker in enumerate(filtered_tickers):
         plt.annotate(
             ticker,
             (hist_returns[i], synthetic_vars[i]),
