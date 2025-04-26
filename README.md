@@ -230,7 +230,7 @@ This project requires an **API key** from the [FRED API](https://fred.stlouisfed
 
 #### Steps to Configure
 1. Register for an API key on [FRED’s website](https://fred.stlouisfed.org/docs/api/api_key.html).  
-2. Create a text file named `fred_api_key.txt` in the root directory of the project.  
+2. Create a text file named `key_fred.txt` in the root directory of the project.  
 3. Save your API key inside the file without any extra characters or spaces.
 
 Example:  
