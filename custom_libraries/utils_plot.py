@@ -333,7 +333,7 @@ def plot_bar_diff(hist_returns, synthetic_vars, tickers):
 
     colors = ["red" if d > 0 else "green" for d in diff]
 
-    plt.figure(figsize=(14, 6))
+    plt.figure(figsize=(18, 6))
     plt.bar(filtered_tickers, diff, color=colors)
     plt.xlabel("Ticker")
     plt.ylabel("Synthetic Worst Case Scenario - Actual Return")

@@ -215,11 +215,17 @@ def detailed_evaluation_forecast(
 
 
 def backtest_tickers_ret_syn(tickers_list, backtest_tickers_df):
-    hist_returns = [
-        backtest_tickers_df[f"hist_return_{ticker}"].mean() for ticker in tickers_list
-    ]
-    synthetic_vars = [
-        backtest_tickers_df[f"synthetic_VaR_{ticker}"].mean() for ticker in tickers_list
-    ]
+    hist_returns = []
+    synthetic_vars = []
+
+    for ticker in tickers_list:
+        hist_ret = backtest_tickers_df[f"hist_return_{ticker}"]
+        syn_var = backtest_tickers_df[f"synthetic_VaR_{ticker}"]
+
+        mask = hist_ret < 0
+
+        hist_returns.append(hist_ret[mask].mean())
+
+        synthetic_vars.append(syn_var[mask].mean())
 
     return hist_returns, synthetic_vars
