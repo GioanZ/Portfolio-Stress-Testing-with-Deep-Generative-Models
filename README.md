@@ -116,6 +116,7 @@ stress_values = {
 - `custom_libraries/stress_backtesting.py`: Simulates extreme market conditions.
 - `custom_libraries/metrics_validation.py`: Computes VaR, ES, and divergence scores.
 - `custom_libraries/utils_stress_testing.py`: Validates synthetic scenarios.
+- `custom_libraries/validation.py`: Performs additional validation tasks.
 
 ### 5. Visualization & Analysis
 - `custom_libraries/utils_plot.py`: Provides plotting utilities for latent space clustering, risk distributions, and backtesting performance.
@@ -125,7 +126,7 @@ stress_values = {
 ## Project Structure
 
 ```lua
-YOUR_FOLDER/
+YOUR_FOLDER
 ├── custom_libraries
 │   ├── custom_layer.py
 │   ├── custom_vae.py
@@ -141,7 +142,8 @@ YOUR_FOLDER/
 │   └── validation.py
 ├── datasets
 │   ├── key_fred.txt
-│   └── portfolio.csv
+│   ├── portfolio.csv
+│   └── README_data.md
 ├── models
 │   ├── critic_model.keras
 │   ├── cvae_model.keras
