@@ -126,27 +126,28 @@ stress_values = {
 
 ```lua
 YOUR_FOLDER/
-├── custom_libraries/
+├── custom_libraries
+│   ├── custom_layer.py
 │   ├── custom_vae.py
 │   ├── custom_wgangp.py
-│   ├── custome_layer.py
 │   ├── download_data.py
 │   ├── metrics_validation.py
 │   ├── preprocess_data.py
 │   ├── start_gpu.py
 │   ├── stress_backtesting.py
 │   ├── utils_plot.py
+│   ├── utils.py
 │   ├── utils_stress_testing.py
-│   └── utils.py
-├── models/
+│   └── validation.py
+├── datasets
+│   ├── key_fred.txt
+│   └── portfolio.csv
+├── models
 │   ├── critic_model.keras
 │   ├── cvae_model.keras
 │   ├── decoder_model.keras
 │   ├── encoder_model.keras
 │   └── generator_model.keras
-├── .gitignore
-├── key_fred.txt
-├── portfolio.csv
 ├── README.md
 ├── requirements.txt
 └── stress_testing.ipynb
@@ -230,7 +231,7 @@ This project requires an **API key** from the [FRED API](https://fred.stlouisfed
 
 #### Steps to Configure
 1. Register for an API key on [FRED’s website](https://fred.stlouisfed.org/docs/api/api_key.html).  
-2. Create a text file named `key_fred.txt` in the root directory of the project.  
+2. Create a text file named `key_fred.txt` inside the `datasets` directory. 
 3. Save your API key inside the file without any extra characters or spaces.
 
 Example:  
